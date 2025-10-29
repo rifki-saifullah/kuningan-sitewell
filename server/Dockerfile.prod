@@ -1,0 +1,36 @@
+# ===== Stage 1: Builder =====
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Salin file package dan install semua dep (termasuk devDeps)
+COPY package*.json ./
+RUN npm install
+
+# Salin semua source code
+COPY . .
+
+# Generate Prisma Client sebelum build
+RUN npx prisma generate
+
+# Build TypeScript ke JavaScript
+RUN npm run build
+
+# ===== Stage 2: Production =====
+FROM node:20-alpine AS production
+
+WORKDIR /app
+
+# Salin package dan install hanya dependencies runtime
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# Salin hasil build dari stage builder
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+EXPOSE 3001
+
+CMD ["node", "dist/main.js"]

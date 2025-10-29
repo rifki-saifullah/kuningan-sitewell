@@ -1,0 +1,30 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    environment:
+      NODE_ENV: "development"
+      ADMIN_USERNAME: "test"
+      ADMIN_EMAIL: "test@mail.me"
+      ADMIN_PASSWORD: "securepass"
+      SECRET_KEY: "SUPERSECRETKEY"
+    command: >
+      sh -c "
+        until npx prisma migrate deploy; do
+          echo 'Waiting for database...'
+          sleep 3
+        done &&
+        echo '✅ Database ready' &&
+        npx prisma generate &&
+        echo '✅ Prisma generated' &&
+        echo '🚀 Starting dev server...' &&
+        npm run dev
+      "
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+  mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: "securepass"

@@ -1,0 +1,30 @@
+node_modules
+
+# Keep environment variables out of version control
+.env
+
+# Ignore Prisma generated files
+/generated/prisma
+
+# Ignore build output
+/dist
+/build
+
+# Ignore logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Ignore IDE files
+.vscode/
+
+# Ignore test coverage output
+/coverage
+
+# Ignore lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

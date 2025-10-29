@@ -1,0 +1,48 @@
+services:
+  server:
+    container_name: server-app
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: "mysql://root:securepass@mysql:3306/sitewell"
+      REDIS_URL: "redis://redis:6379"
+      EXPIRES_IN: 3600
+      TELEGRAM_BOT_TOKEN: "8361694271:AAGYvY4zvFFP8apADOtq2yhhyihKZSVrS58"
+      TELEGRAM_CHAT_ID: -4953478805
+      NOTIFICATION_CRON_SCHEDULE: "*0 0 * * *"
+    depends_on:
+      - mysql
+      - redis
+
+  client:
+    container_name: client-app
+    ports:
+      - "3000:3000"
+    environment:
+      API_BASE: "http://server:3001/api"
+      TELEGRAM_GROUP_LINK: "https://t.me/+vK7mPx_tSsIzYjdl"
+    depends_on:
+      - server
+  mysql:
+    image: mysql:8.1
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "securepass"
+      MYSQL_DATABASE: "sitewell"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mysql-data:
+  redis-data:

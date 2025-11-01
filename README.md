@@ -33,8 +33,8 @@ sudo docker exec -it server-app npm run seed:dev
 ```
 
 📌 Default ports:
-- Frontend: http://localhost:3001 
-- Backend: http://localhost:3000 
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3001
 - MySQL: localhost:3306
 - Redis: localhost:6379
 - application : http://localhost

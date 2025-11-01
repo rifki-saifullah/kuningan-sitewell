@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE || 'http://localhost:3000/api',
+      apiBase: process.env.API_BASE || 'http://localhost:3001/api',
       telegramGroupLink: process.env.TELEGRAM_GROUP_LINK || ''
     }
   },

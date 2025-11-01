@@ -1,0 +1,26 @@
+{
+    # Aktifkan log agar mudah debug
+    debug
+    # Hot reload otomatis saat file berubah
+    auto_https off
+}
+
+# Reverse proxy frontend (Nuxt, React, dsb)
+http://localhost:80 {
+    handle /api/* {
+        reverse_proxy server:3001
+        header Access-Control-Allow-Origin *
+        header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        header Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+
+    handle {
+        reverse_proxy client:3000
+    }
+
+    # Logging & CORS opsional
+    log {
+        output stdout
+        format console
+    }
+}

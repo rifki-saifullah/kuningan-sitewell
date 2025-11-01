@@ -46,7 +46,7 @@
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/main.ts",
     "seed:prod": "node dist/seeder/seeder.js",
-    "seed:dev": "ts-node-dev --respawn --transpile-only test/seeder.ts",
+    "seed:dev": "ts-node-dev --respawn --transpile-only src/seeder/seeder.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"

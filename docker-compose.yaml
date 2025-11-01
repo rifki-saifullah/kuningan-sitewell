@@ -1,8 +1,6 @@
 services:
   server:
     container_name: server-app
-    ports:
-      - "3001:3001"
     environment:
       DATABASE_URL: "mysql://root:securepass@mysql:3306/sitewell"
       REDIS_URL: "redis://redis:6379"
@@ -16,11 +14,9 @@ services:
 
   client:
     container_name: client-app
-    ports:
-      - "3000:3000"
     environment:
-      API_BASE: "http://server:3001/api"
       TELEGRAM_GROUP_LINK: "https://t.me/+vK7mPx_tSsIzYjdl"
+      API_BASE: "http://localhost/api"
     depends_on:
       - server
   mysql:

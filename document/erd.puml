@@ -1,0 +1,26 @@
+@startuml
+!define table(x) class x << (T,#FFFFFF) >>
+
+table(users) {
+  +id : int
+  username : varchar
+  email : varchar
+  password : varchar
+  created_at : date
+  updated_at : date
+}
+
+table(posts) {
+    +id : int
+    name : int
+    description : varchar
+    url : text
+    is_healty : text
+    response_code : text
+    message : text
+    created_at : date
+    updated_at : date
+}
+
+
+@enduml

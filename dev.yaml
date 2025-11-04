@@ -1,0 +1,44 @@
+services:
+  mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: "securepass"
+      MYSQL_DATABASE: "sitewell"
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    environment:
+      NODE_ENV: "development"
+      DATABASE_URL: "mysql://root:securepass@mysql:3306/sitewell"
+      REDIS_URL: "redis://redis:6379"
+      ADMIN_USERNAME: "Admin Test"
+      ADMIN_EMAIL: "test@mail.me"
+      ADMIN_PASSWORD: "securepass"
+      SECRET_KEY: "SUPERSECRETKEY"
+      NOTIFICATION_CRON_SCHEDULE: "0 59 * * * *"
+      TELEGRAM_BOT_TOKEN: ""
+      TELEGRAM_CHAT_ID: 0
+    command: >
+      sh -c "
+        until npx prisma migrate deploy; do
+          echo 'Waiting for database...'
+          sleep 3
+        done &&
+        echo '✅ Database ready' &&
+        npx prisma generate &&
+        echo '✅ Prisma generated' &&
+        echo '🚀 Starting dev server...' &&
+        npm run dev
+      "
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    environment:
+      TELEGRAM_GROUP_LINK: ""
+
+  caddy:
+    volumes:
+      - ./caddy/CaddyfileDev:/etc/caddy/Caddyfile:ro

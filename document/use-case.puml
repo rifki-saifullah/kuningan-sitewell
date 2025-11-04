@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+
+actor "Admin" as A
+
+rectangle "Kuningan SiteWell" {
+    usecase "Login" as UC1
+    usecase "Ganti Password" as UC2
+    usecase "CRUD Data Website" as UC3
+    usecase "Cek Kesehatan Website" as UC4
+    usecase "Cek setiap 1 jam sekali" as UC5
+    usecase "Kirim pesan jika error ke grup Telegram" as UC6
+}
+
+A --> UC1
+A --> UC2
+A --> UC3
+A --> UC4
+UC4 --> UC5 : <<include>>
+UC5 --> UC6 : <<include>>
+@enduml

@@ -1,0 +1,59 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: mysql-db
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  server:
+    container_name: server-app
+    restart: always
+    environment:
+      EXPIRES_IN: 3600
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+      - redis
+
+  client:
+    container_name: client-app
+    restart: always
+    environment:
+      API_BASE: "/api"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - client
+      - server
+
+volumes:
+  mysql-data:
+  redis-data:
+  caddy_data:
+  caddy_config:

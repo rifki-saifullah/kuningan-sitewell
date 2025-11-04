@@ -1,0 +1,27 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.errorMiddleware = void 0;
+const zod_1 = require("zod");
+const response_error_1 = require("../error/response-error");
+const logging_1 = require("../application/logging");
+const errorMiddleware = async (error, req, res, next) => {
+    if (error instanceof zod_1.ZodError) {
+        res.status(400).json({
+            errors: error,
+        });
+    }
+    else if (error instanceof response_error_1.ResponseError) {
+        res.status(error.status).json({
+            errors: error.message,
+        });
+    }
+    else {
+        logging_1.logger.error("❌[ERROR]: Internal Server Error");
+        logging_1.logger.error("💬[ERROR MESSAGE]: ", error);
+        res.status(500).json({
+            errors: error.message,
+        });
+    }
+};
+exports.errorMiddleware = errorMiddleware;
+//# sourceMappingURL=error-middleware.js.map
